@@ -1,18 +1,24 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    // Start is called before the first frame update
+    Transform GFX;
+    float flipx;
+
     void Start()
     {
-        
+        GFX = GetComponentInChildren<SpriteRenderer>().transform;
+        flipx = GFX.localScale.x;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
+        // キー入力で方向転換
+        float horizontal = Math.Sign(Input.GetAxisRaw("Horizontal"));
+        if (Mathf.Abs(horizontal) > 0)
+        {
+            GFX.localScale = new Vector2(flipx * horizontal, GFX.localScale.y);
+        }
     }
 }
