@@ -171,7 +171,14 @@ MonoBehaviour:
   wallPrefab: {fileID: 6446468002315998695, guid: ebd2b3589213f4099a49597e171198b2, type: 3}
   tilePrefab: {fileID: 6033484531457288736, guid: a1915d82370404df7a58485f8b657e6b, type: 3}
   exitPrefab: {fileID: 6001495598924279521, guid: 45722f8109c4e432483f00d810872751, type: 3}
-  totalFloorCount: 50
+  randomItems:
+  - {fileID: 2959417320524250529, guid: d40cb7ae11d104963b2458e1fa5d55db, type: 3}
+  - {fileID: 5589229629602417648, guid: 61bdb0c9cb3b245198f451e56f1196a0, type: 3}
+  - {fileID: 486913430472548568, guid: 188df327819f54e1bb6f80612436ffc4, type: 3}
+  - {fileID: 7037669526404511226, guid: 509bb182d79734849b2af4060b8aaeb2, type: 3}
+  - {fileID: 6502575600267669851, guid: 47cedbd03a6cb45f68df5e42e16fd47c, type: 3}
+  totalFloorCount: 200
+  itemSpawnPercent: 11
   minX: 0
   maxX: 0
   minY: 0
