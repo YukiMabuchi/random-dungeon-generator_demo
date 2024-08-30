@@ -20,6 +20,11 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        Move();
+    }
+
+    void Move()
+    {
         // キー入力で方向転換
         float horizontal = Math.Sign(Input.GetAxisRaw("Horizontal")); // InputManagerの設定の名前
         float vertical = Math.Sign(Input.GetAxisRaw("Vertical")); // InputManagerの設定の名前
