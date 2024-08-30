@@ -1,10 +1,11 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class DungeonManager : MonoBehaviour
 {
-    public GameObject floorPrefab, wallPrefab, tilePrefab;
+    public GameObject floorPrefab, wallPrefab, tilePrefab, exitPrefab;
     public int totalFloorCount;
 
     [HideInInspector] public float minX, maxX, minY, maxY;
@@ -76,5 +77,25 @@ public class DungeonManager : MonoBehaviour
             goTile.transform.SetParent(transform);
         }
 
+        // ExitDoorの作成
+        StartCoroutine(DelayProgress());
+    }
+
+    IEnumerator DelayProgress()
+    {
+        // タイルの生成が終了するのを待つ
+        while (FindObjectsOfType<TileSpawner>().Length > 0)
+        {
+            yield return null;
+        }
+        ExitDoorway();
+    }
+
+    void ExitDoorway()
+    {
+        Vector3 doorPos = floorList[floorList.Count - 1];
+        GameObject goDoor = Instantiate(exitPrefab, doorPos, Quaternion.identity);
+        goDoor.name = exitPrefab.name;
+        goDoor.transform.SetParent(transform);
     }
 }
