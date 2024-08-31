@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+public enum DungeonType { Caverns, Rooms }
+
 public class DungeonManager : MonoBehaviour
 {
     public GameObject floorPrefab, wallPrefab, tilePrefab, exitPrefab;
@@ -10,6 +12,7 @@ public class DungeonManager : MonoBehaviour
     [Range(50, 1000)] public int totalFloorCount;
     [Range(0, 100)] public int itemSpawnPercent;
     [Range(0, 100)] public int enemySpawnPercent;
+    public DungeonType dungeonType;
 
     [HideInInspector] public float minX, maxX, minY, maxY;
 
@@ -22,7 +25,16 @@ public class DungeonManager : MonoBehaviour
     {
         floorMask = LayerMask.GetMask("Floor");
         wallMask = LayerMask.GetMask("Wall");
-        RandomWalker();
+
+        switch (dungeonType)
+        {
+            case DungeonType.Caverns:
+                RandomWalker();
+                break;
+            case DungeonType.Rooms:
+                RoomWalker();
+                break;
+        }
     }
     void Update()
     {
@@ -39,26 +51,37 @@ public class DungeonManager : MonoBehaviour
     void RandomWalker()
     {
         Vector3 curPos = Vector3.zero; // x: 0, y: 0, z: 0
-
         floorList.Add(curPos);
 
-        // floorListを作成
         while (floorList.Count < totalFloorCount)
         {
             curPos += RandomDirection();
-
             if (!InFloorList(curPos))
             {
                 floorList.Add(curPos);
             }
         }
 
-        // floorListを元にタイルを生成
-        for (int i = 0; i < floorList.Count; i++)
+        StartCoroutine(DelayProgress());
+    }
+
+    void RoomWalker()
+    {
+        Vector3 curPos = Vector3.zero; // x: 0, y: 0, z: 0
+        floorList.Add(curPos);
+
+        while (floorList.Count < totalFloorCount)
         {
-            GameObject goTile = Instantiate(tilePrefab, floorList[i], Quaternion.identity);
-            goTile.name = tilePrefab.name;
-            goTile.transform.SetParent(transform);
+            Vector3 walkDir = RandomDirection();
+            int walkLength = Random.Range(9, 18); // 部屋までの道の長さ
+            for (int i = 0; i < walkLength; i++)
+            {
+                if (!InFloorList(curPos + walkDir))
+                {
+                    floorList.Add(curPos + walkDir);
+                }
+                curPos += walkDir;
+            }
         }
 
         StartCoroutine(DelayProgress());
@@ -98,6 +121,14 @@ public class DungeonManager : MonoBehaviour
 
     IEnumerator DelayProgress()
     {
+        // floorListを元にタイルを生成
+        for (int i = 0; i < floorList.Count; i++)
+        {
+            GameObject goTile = Instantiate(tilePrefab, floorList[i], Quaternion.identity);
+            goTile.name = tilePrefab.name;
+            goTile.transform.SetParent(transform);
+        }
+
         // タイルの生成が終了するのを待つ
         while (FindObjectsOfType<TileSpawner>().Length > 0)
         {
