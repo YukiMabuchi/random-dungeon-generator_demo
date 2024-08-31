@@ -183,7 +183,7 @@ MonoBehaviour:
   - {fileID: 3244233215478890445, guid: 9154c14857111450f94ff7ee514e0e6f, type: 3}
   - {fileID: 6090671898469958587, guid: c90c1280543924f608061539377aaca4, type: 3}
   - {fileID: 8318396678761778065, guid: 0e8932f5789354fdb93e4ce300575dee, type: 3}
-  totalFloorCount: 200
+  totalFloorCount: 500
   itemSpawnPercent: 11
   enemySpawnPercent: 15
   dungeonType: 1
