@@ -43,35 +43,11 @@ public class DungeonManager : MonoBehaviour
         floorList.Add(curPos);
 
         // floorListを作成
-        bool inFLoorList;
         while (floorList.Count < totalFloorCount)
         {
-            switch (Random.Range(1, 5))
-            {
-                case 1:
-                    curPos += Vector3.up;
-                    break;
-                case 2:
-                    curPos += Vector3.right;
-                    break;
-                case 3:
-                    curPos += Vector3.down;
-                    break;
-                case 4:
-                    curPos += Vector3.left;
-                    break;
-            }
+            curPos += RandomDirection();
 
-            inFLoorList = false;
-            for (int i = 0; i < floorList.Count; i++)
-            {
-                if (Vector3.Equals(curPos, floorList[i]))
-                {
-                    inFLoorList = true;
-                    break;
-                }
-            }
-            if (!inFLoorList)
+            if (!InFloorList(curPos))
             {
                 floorList.Add(curPos);
             }
@@ -86,6 +62,38 @@ public class DungeonManager : MonoBehaviour
         }
 
         StartCoroutine(DelayProgress());
+    }
+
+    bool InFloorList(Vector3 myPos)
+    {
+        for (int i = 0; i < floorList.Count; i++)
+        {
+            if (Vector3.Equals(myPos, floorList[i]))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// 上下左右のベクトルをランダムに生成する
+    /// </summary>
+    /// <returns>ベクトル</returns>
+    Vector3 RandomDirection()
+    {
+        switch (Random.Range(1, 5))
+        {
+            case 1:
+                return Vector3.up;
+            case 2:
+                return Vector3.right;
+            case 3:
+                return Vector3.down;
+            case 4:
+                return Vector3.left;
+        }
+        return Vector3.zero;
     }
 
     IEnumerator DelayProgress()
