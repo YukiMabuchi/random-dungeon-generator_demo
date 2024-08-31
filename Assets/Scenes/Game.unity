@@ -177,8 +177,15 @@ MonoBehaviour:
   - {fileID: 486913430472548568, guid: 188df327819f54e1bb6f80612436ffc4, type: 3}
   - {fileID: 7037669526404511226, guid: 509bb182d79734849b2af4060b8aaeb2, type: 3}
   - {fileID: 6502575600267669851, guid: 47cedbd03a6cb45f68df5e42e16fd47c, type: 3}
+  randomEnemies:
+  - {fileID: 4419153229983960379, guid: afe30f847ce594eb88a38935377e887e, type: 3}
+  - {fileID: 6311814694560995289, guid: 4e51176dd3cfc4c2a80f86dad788dfa2, type: 3}
+  - {fileID: 3244233215478890445, guid: 9154c14857111450f94ff7ee514e0e6f, type: 3}
+  - {fileID: 6090671898469958587, guid: c90c1280543924f608061539377aaca4, type: 3}
+  - {fileID: 8318396678761778065, guid: 0e8932f5789354fdb93e4ce300575dee, type: 3}
   totalFloorCount: 200
-  itemSpawnPercent: 11
+  itemSpawnPercent: 0
+  enemySpawnPercent: 0
   minX: 0
   maxX: 0
   minY: 0

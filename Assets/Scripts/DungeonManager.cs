@@ -6,9 +6,10 @@ using UnityEngine.SceneManagement;
 public class DungeonManager : MonoBehaviour
 {
     public GameObject floorPrefab, wallPrefab, tilePrefab, exitPrefab;
-    public GameObject[] randomItems;
+    public GameObject[] randomItems, randomEnemies;
     [Range(50, 1000)] public int totalFloorCount;
     [Range(0, 100)] public int itemSpawnPercent;
+    [Range(0, 100)] public int enemySpawnPercent;
 
     [HideInInspector] public float minX, maxX, minY, maxY;
 
@@ -115,6 +116,7 @@ public class DungeonManager : MonoBehaviour
                         Collider2D hitLeft = Physics2D.OverlapBox(new Vector2(x - 1, y), hitSize, 0, wallMask);
 
                         RandomItems(hitFloor, hitTop, hitRight, hitBottom, hitLeft);
+                        RandomEnemies(hitFloor, hitTop, hitRight, hitBottom, hitLeft);
                     }
                 }
             }
@@ -122,11 +124,27 @@ public class DungeonManager : MonoBehaviour
 
     }
 
+    void RandomEnemies(Collider2D hitFloor, Collider2D hitTop, Collider2D hitRight, Collider2D hitBottom, Collider2D hitLeft)
+    {
+        if (!hitTop && !hitRight && !hitBottom && !hitLeft)
+        {
+            int roll = Random.Range(1, 101);
+            if (roll <= enemySpawnPercent)
+            {
+                int enemyIndex = Random.Range(0, randomEnemies.Length);
+                GameObject item = randomEnemies[enemyIndex];
+                GameObject goEnemy = Instantiate(item, hitFloor.transform.position, Quaternion.identity);
+                goEnemy.name = item.name;
+                goEnemy.transform.SetParent(hitFloor.transform);
+            }
+        }
+    }
+
     void RandomItems(Collider2D hitFloor, Collider2D hitTop, Collider2D hitRight, Collider2D hitBottom, Collider2D hitLeft)
     {
         if ((hitTop || hitRight || hitBottom || hitLeft) && !(hitTop && hitBottom) && !(hitRight && hitLeft))
         {
-            int roll = Random.Range(0, 101);
+            int roll = Random.Range(1, 101);
             if (roll <= itemSpawnPercent)
             {
                 int itemIndex = Random.Range(0, randomItems.Length);
