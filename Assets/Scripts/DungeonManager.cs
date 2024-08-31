@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public enum DungeonType { Caverns, Rooms }
+public enum DungeonType { Caverns, Rooms, Winding }
 
 public class DungeonManager : MonoBehaviour
 {
@@ -12,6 +12,8 @@ public class DungeonManager : MonoBehaviour
     [Range(50, 1000)] public int totalFloorCount;
     [Range(0, 100)] public int itemSpawnPercent;
     [Range(0, 100)] public int enemySpawnPercent;
+    [Tooltip("DungeonTypeがWindingの時、低いほど部屋が作成される")]
+    [Range(0, 100)] public int windingHallPercent;
     public DungeonType dungeonType;
 
     [HideInInspector] public float minX, maxX, minY, maxY;
@@ -34,6 +36,9 @@ public class DungeonManager : MonoBehaviour
             case DungeonType.Rooms:
                 RoomWalker();
                 break;
+            case DungeonType.Winding:
+                WindingWalker();
+                break;
         }
     }
     void Update()
@@ -46,7 +51,7 @@ public class DungeonManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Map Generator
+    /// ランダムマップジェネレーター
     /// </summary>
     void RandomWalker()
     {
@@ -73,34 +78,70 @@ public class DungeonManager : MonoBehaviour
         while (floorList.Count < totalFloorCount)
         {
             // 道の作成
-            Vector3 walkDir = RandomDirection();
-            int walkLength = Random.Range(9, 18); // 部屋までの道の長さ
-            for (int i = 0; i < walkLength; i++)
-            {
-                if (!InFloorList(curPos + walkDir))
-                {
-                    floorList.Add(curPos + walkDir);
-                }
-                curPos += walkDir;
-            }
+            curPos = TakeAHike(curPos);
 
             // 部屋の作成
-            int width = Random.Range(1, 5); // 半径
-            int height = Random.Range(1, 5); // 半径
-            for (int w = -width; w <= width; w++)
+            RandomRoom(curPos);
+        }
+
+        StartCoroutine(DelayProgress());
+    }
+
+    /// <summary>
+    /// 部屋までの道に部屋を作る可能性を調節可能なマップジェネレーター
+    /// </summary>
+    void WindingWalker()
+    {
+        Vector3 curPos = Vector3.zero; // x: 0, y: 0, z: 0
+        floorList.Add(curPos);
+
+        while (floorList.Count < totalFloorCount)
+        {
+            // 道の作成
+            curPos = TakeAHike(curPos);
+
+            // 部屋の作成
+            int roll = Random.Range(0, 100);
+            if (roll > windingHallPercent)
             {
-                for (int h = -height; h <= height; h++)
-                {
-                    Vector3 offset = new Vector3(w, h, 0);
-                    if (!InFloorList(curPos + offset))
-                    {
-                        floorList.Add(curPos + offset);
-                    }
-                }
+                RandomRoom(curPos);
             }
         }
 
         StartCoroutine(DelayProgress());
+    }
+
+    Vector3 TakeAHike(Vector3 myPos)
+    {
+        Vector3 walkDir = RandomDirection();
+        int walkLength = Random.Range(9, 18); // 部屋までの道の長さ
+        for (int i = 0; i < walkLength; i++)
+        {
+            if (!InFloorList(myPos + walkDir))
+            {
+                floorList.Add(myPos + walkDir);
+            }
+            myPos += walkDir;
+        }
+
+        return myPos;
+    }
+
+    void RandomRoom(Vector3 myPos)
+    {
+        int width = Random.Range(1, 5); // 半径
+        int height = Random.Range(1, 5); // 半径
+        for (int w = -width; w <= width; w++)
+        {
+            for (int h = -height; h <= height; h++)
+            {
+                Vector3 offset = new Vector3(w, h, 0);
+                if (!InFloorList(myPos + offset))
+                {
+                    floorList.Add(myPos + offset);
+                }
+            }
+        }
     }
 
     bool InFloorList(Vector3 myPos)
