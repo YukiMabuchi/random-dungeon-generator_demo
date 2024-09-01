@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6298599486293167255}
   - component: {fileID: 1542886353689406301}
   - component: {fileID: 5761247905114910700}
+  - component: {fileID: -8894818673629065617}
   m_Layer: 7
   m_Name: GelCube
   m_TagString: Untagged
@@ -130,3 +131,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.8, y: 0.8}
   m_EdgeRadius: 0
+--- !u!114 &-8894818673629065617
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6311814694560995289}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb5f32d9bd2c848a1820eeae4abe680a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  alertRange: 10
+  patrolInterval: {x: 1, y: 5}
+  chaseSpeed: 10
